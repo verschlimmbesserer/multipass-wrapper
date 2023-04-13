@@ -17,11 +17,11 @@ def read_yaml():
         print("Can't find multipass.yaml in current directory. Please run msl init")
 
 
-def current_instance():
-    return list(yaml.safe_load(subprocess.check_output("multipass list --format yaml", shell=True)).keys())
+def current_instances():
+    return list(yaml.safe_load(subprocess.check_output("multipass info --all --format yaml", shell=True)).keys())
 
 
-def virtual_instance(virtual_machines, config):
+def virtual_instances(virtual_machines, config):
     if len(virtual_machines) > 0:
         virtual_machines = virtual_machines
     else:
@@ -137,18 +137,17 @@ def main():
     args = parser()
 
     if args.command == "launch":
-        vms = virtual_instance(config=read_yaml(), virtual_machines=args.launch)
-        print(vms)
-        launch(current=current_instance(), config=read_yaml(), virtual_machines=vms)
+        vms = virtual_instances(config=read_yaml(), virtual_machines=args.launch)
+        launch(current=current_instances(), config=read_yaml(), virtual_machines=vms)
     elif args.command == "stop":
-        vms = virtual_instance(config=read_yaml(), virtual_machines=args.stop)
-        stop(virtual_machines=vms, current=current_instance(), stop_all=args.all)
+        vms = virtual_instances(config=read_yaml(), virtual_machines=args.stop)
+        stop(virtual_machines=vms, current=current_instances(), stop_all=args.all)
     elif args.command == "delete":
-        vms = virtual_instance(config=read_yaml(), virtual_machines=args.delete)
-        delete(virtual_machines=vms, current=current_instance(), delete_all=args.all)
+        vms = virtual_instances(config=read_yaml(), virtual_machines=args.delete)
+        delete(virtual_machines=vms, current=current_instances(), delete_all=args.all)
     elif args.command == "mount":
-        vms = virtual_instance(config=read_yaml(), virtual_machines=args.mount)
-        mount(current=current_instance(), config=read_yaml(), virtual_machines=vms)
+        vms = virtual_instances(config=read_yaml(), virtual_machines=args.mount)
+        mount(current=current_instances(), config=read_yaml(), virtual_machines=vms)
     elif args.command == "init":
         init()
     else:
